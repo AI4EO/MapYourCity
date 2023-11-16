@@ -1,2 +1,2 @@
 # MapYourCity
-Materials for AI4EO #MapYourCity challenge
+Starter notebook for AI4EO #MapYourCity challenge
