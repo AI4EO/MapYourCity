@@ -1,0 +1,289 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Example DataLoader for the MapYourCity dataset  
+# # use train_loader and test_loader    
+
+# # #MapYourCity    
+# This notebook showcases the #MapYourCity dataset structure and format. The three modalities are visualised and the distributions according to training labels, countries and cities is shown. We also present the format and evaluation metrics for challenge solution submission.
+# ## Dataset structure  
+# The dataset is divided into 2 collections, train and test. Each collection contains a csv file with a list of labeled building IDs (pid) and a data folder containing up to 3 images for every building (street view, orthophoto and Sentinel 2) and also the label for the training set. 
+# Dataset structure:
+# - /dataset
+#   - /train
+#     - train-set.csv
+#     - /data
+#       - /< pid >
+#         - label.txt
+#         - street.jpg
+#         - s2_l2a.tif
+#         - orthophoto.tif
+#   - /test
+#     - test-set.csv
+#     - /data
+#       - /< pid >
+#         - street.jpg (for 2 cities only) 
+#         - s2_l2a.tif 
+#         - orthophoto.tif
+# ## Image formats and structure     
+# # The dataset consists of three different image modalities and the labels for the training set:  
+# - streetview image in **jpg** format of pixel size 512 x 1024 showing the face-view of the building
+# - top-view orthophoto image in **tif** format of size of 512 x 512 pixels with pixel size of 0.5 m, covering an area of 256 x 256 squared metres around the building, with three bands (RGB)
+# - top-view Sentinel-2 L2A image **tif** format of size 64 x 64 with pixel size of 10 m, covering an area of 640 x 640 squared metres around the building, with 12 bands:
+# - - [Sentinel-2 L2A bands](https://docs.sentinel-hub.com/api/latest/data/sentinel-2-l2a/#available-bands-and-data): ["B01","B02", "B03", "B04","B05","B06","B07","B08","B8A","B09","B11","B12"]
+# - a **txt** file with labels. There are 7 different labels (classes) denoting 7 binned age of buildings.  
+# The images are loaded and visualised in the sections below. 
+# ## Load data 
+# # Imports  
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import rasterio 
+# # Define paths to data   
+# input_path = "directory with MapYourCity image files" 
+#input_path = "dataset/"  
+#input_path = "/home/ndionelis/building-age-dataset/"  
+input_path = "/Data/ndionelis/building-age-dataset/"
+train_path = input_path + "train/data/"
+test_path = input_path + "test/data/"
+# Load csv files
+test_df = pd.read_csv(input_path + "test/test-set.csv")
+train_df = pd.read_csv(input_path + "train/train-set.csv")
+# Check csv files
+train_df.head()
+test_df.head() 
+# ## Image visualisation      
+# # Choose a building by pid: 
+# pid = "225eklykc3"   
+# street = plt.imread(f"{train_path}{pid}/street.jpg") 
+# orthophoto = plt.imread(f"{train_path}{pid}/orthophoto.tif")
+# s2 = rasterio.open(f"{train_path}{pid}/s2_l2a.tif").read()
+# s2 = np.transpose(s2,[1,2,0])
+# #print("Image dimensions:")  
+# print(f"street view: {street.shape}" )
+# print(f"orthophoto: {orthophoto.shape}" )
+# print(f"Sentinel-2: {s2.shape}" )
+import os  
+names_data = os.listdir(train_path) # # to not load all data in a single tensor, load only the names                   
+length_names = len(names_data)
+# #print(names_data)        
+# print(length_names)   
+import torch
+perm = torch.randperm(length_names)
+#idx = perm[:round(0.8*length_names)] # # # draw round(0.8*length_names) samples    
+
+#idx = perm[:round(0.78571428571*length_names)] # # # draw round(0.78571428571*length_names) samples  
+#torch.save(idx, 'indexForTrainVal.pt')      
+idx = torch.load('indexForTrainVal.pt')  
+
+names_data = np.array(names_data) 
+idx = idx.numpy() 
+training_data = names_data[idx]
+#print(training_data)   
+#print(len(training_data)) 
+#test_data = names_data[~idx]         
+mask = np.ones(names_data.size, dtype=bool)  
+mask[idx] = False
+test_data = names_data[mask]
+#print(len(test_data))  
+
+#from PIL import Image  
+import cv2
+class Dataset(torch.utils.data.Dataset):  
+    #def __init__(self, list_IDs, labels):    
+    def __init__(self, list_IDs):
+        #self.labels = labels
+        self.list_IDs = list_IDs
+    def __len__(self):
+        return len(self.list_IDs)
+    def __getitem__(self, index): 
+        ID = self.list_IDs[index] 
+        #X = torch.load('data/' + ID + '.pt')      
+        #print(train_path + ID + '/street.jpg')
+        #X = torch.load(train_path + ID + '/street.jpg')           
+        #X = plt.imread(train_path + ID + '/street.jpg')  
+        X = cv2.imread(train_path + ID + '/street.jpg')
+        X = cv2.resize(X, (256, 256)) 
+        #X = cv2.resize(X, (512, 512))   
+        #X = cv2.resize(X, (1024, 1024)) 
+        X2 = cv2.imread(train_path + ID + '/orthophoto.tif') 
+        X2 = cv2.resize(X2, (256, 256)) 
+        X3 = rasterio.open(train_path + ID + '/s2_l2a.tif').read() 
+        X3 = np.transpose(X3, [1, 2, 0]) 
+        #X = Image.open(train_path + ID + '/street.jpg')       
+        #print(X.shape)  
+        #print(np.size(X))  
+        # # (783, 1024, 3)                  
+        # # (512, 1024, 3)  
+        #y = self.labels[ID]     
+        #y = 1    
+        #y = open(train_path + ID + '/label.txt', "r").read()  
+        y = int(open(train_path + ID + '/label.txt', "r").read())
+        #return X, y 
+        #return X, X2, y  
+        return X, X2, X3, y 
+        #return X     
+# f = open("demofile.txt", "r")    
+# print(f.read())  
+# street = plt.imread(f"{train_path}{pid}/street.jpg")         
+# orthophoto = plt.imread(f"{train_path}{pid}/orthophoto.tif")  
+# s2 = rasterio.open(f"{train_path}{pid}/s2_l2a.tif").read() 
+# s2 = np.transpose(s2, [1, 2, 0])
+# print(f"street view: {street.shape}" )  
+# print(f"orthophoto: {orthophoto.shape}" )
+# print(f"Sentinel-2: {s2.shape}" )  
+BATCH_SIZE = 32 
+#print(training_data.tolist()[0])  
+#print(len(training_data.tolist()[0])) 
+#train_set = Dataset(training_data)       
+train_set = Dataset(training_data.tolist()) 
+#print(len(train_set))  
+train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True)  
+#train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE) 
+# train_loader_iter = iter(train_loader)
+# train_loader_iter_next = next(train_loader_iter) 
+# #train_loader_iter_next, train_loader_iter_next2 = train_loader_iter_next       
+# #train_loader_iter_next, train_loader_iter_next2, train_loader_iter_next3 = train_loader_iter_next    
+# train_loader_iter_next, train_loader_iter_next2, train_loader_iter_next3, train_loader_iter_next4 = train_loader_iter_next
+
+# print('')        
+# #print(train_loader_iter_next)                   
+# #print(train_loader_iter_next2)  
+# #print(train_loader_iter_next3) 
+# print(train_loader_iter_next4)
+# print(train_loader_iter_next.shape)     
+# print(train_loader_iter_next2.shape)
+# print(train_loader_iter_next3.shape)
+# print(train_loader_iter_next4.shape) 
+#print('')             
+# #print(train_loader_iter_next)                      
+# #print(train_loader_iter_next2)     
+# #print(train_loader_iter_next3) 
+# print(train_loader_iter_next4)
+
+# print(train_loader_iter_next4) 
+# print(train_loader_iter_next.shape) 
+# print(train_loader_iter_next2.shape)
+# print(train_loader_iter_next3.shape)
+# print(train_loader_iter_next4.shape)
+
+test_set = Dataset(test_data.tolist())  
+#print(len(test_set))     
+test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE)   
+#test_loader_iter = iter(test_loader) 
+#test_loader_iter_next = next(test_loader_iter)   
+#test_loader_iter_next, test_loader_iter_next2, test_loader_iter_next3, test_loader_iter_next4 = test_loader_iter_next 
+
+# # use train_loader and test_loader      
+
+# print(test_loader_iter_next4)   
+# print(test_loader_iter_next.shape)  
+# print(test_loader_iter_next2.shape)
+# print(test_loader_iter_next3.shape)
+# print(test_loader_iter_next4.shape)
+
+# tensor([0, 4, 3, 2, 0, 3, 3, 6, 0, 1, 0, 4, 0, 3, 3, 6, 2, 3, 6, 5, 2, 4, 4, 0,
+#         6, 6, 4, 4, 6, 4, 5, 6])   
+# torch.Size([32, 256, 256, 3])  
+# torch.Size([32, 512, 512, 3])
+# torch.Size([32, 64, 64, 12])
+# torch.Size([32]) 
+# tensor([1, 5, 3, 0, 4, 4, 0, 4, 3, 5, 2, 0, 6, 6, 0, 2, 6, 6, 3, 6, 1, 1, 6, 4,
+#         4, 1, 5, 2, 3, 5, 0, 0])      
+# torch.Size([32, 256, 256, 3])   
+# torch.Size([32, 512, 512, 3]) 
+# torch.Size([32, 64, 64, 12])
+# torch.Size([32]) 
+# tensor([3, 3, 2, 0, 3, 2, 0, 1, 4, 4, 0, 5, 0, 0, 0, 1, 2, 3, 2, 2, 3, 4, 4, 0,
+#         0, 0, 0, 4, 2, 0, 5, 0]) 
+# torch.Size([32, 256, 256, 3]) 
+# torch.Size([32, 512, 512, 3])
+# torch.Size([32, 64, 64, 12])
+# torch.Size([32])
+# # Show the 3 modalities - street view, orthophoto and Sentinel-2   
+# fig, axs = plt.subplots(figsize=(15, 15), ncols = 3) 
+# axs[0].imshow(street)
+# axs[1].imshow(orthophoto)
+# axs[2].imshow(s2[...,[3,2,1]]*3e-4) 
+# axs[0].set_title("Street")
+# axs[1].set_title("Orthophoto")
+# axs[2].set_title("Sentinel-2-L2A");
+# # Relative position and size of orthophoto and Sentinel-2 images, with building location (blue dot)  
+# plt.figure(figsize=(7,7))
+# plt.imshow(s2[...,[3,2,1]]*3e-4, extent=(-320, 320, -320, 320))
+# plt.imshow(orthophoto, extent=(-128, 128, -128, 128))
+# plt.plot(0,0, "b", marker = "o", markersize = 8 ) # building location
+# plt.title(" Orthophoto and Sentinel-2 images, with building location in the centre (blue dot)")
+# plt.xlabel("distance (m)")
+# plt.ylabel("distance (m)")
+# plt.plot();
+# # ## Data exploration
+# # Plot the distribution by age classes(labels), countries and cities
+# fig, axs = plt.subplots(figsize=(12, 4), ncols=3)
+# train_df["label"].value_counts(sort=False).sort_index().plot(kind="bar", ax = axs[0])
+# train_df["country_id"].value_counts(sort=False).plot(kind="bar", ax = axs[1])
+# train_df["city_id"].value_counts(sort=False).plot(kind="bar",ax = axs[2])
+# axs[0].set_title("Distribution by 7 age classes (labels)")
+# axs[0].set_xlabel("Binned age class (label)")
+# axs[1].set_title("Distribution by countries")
+# axs[1].set_xlabel("Country code")
+# axs[2].set_title("Distribution by cities")
+# axs[2].set_xlabel("City code");
+# # # Submission format
+# # To submit your solution, create a csv file with building IDs (pid) and corresponding result labels (as shown in dummy example below), created by running your trained model on the test dataset.
+# res_df = test_df.copy()
+# res_df["predicted_label"]= np.random.randint(0,6,res_df.shape[0])
+# res_df.head()
+# # Save solution to csv 
+# res_df.to_csv("example_result.csv") 
+# # # Evaluation metrics 
+# # Solutions will be evaluated according to the [Mean Producer Accuracy](https://pages.cms.hu-berlin.de/EOL/geo_rs/S10_Accuracy_assessment.html#Producer%E2%80%99s_Accuracy__Omission_Error) (MPA: the average of diagonal elements of the 7-class confusion matrix) according to:
+# # ### MPA {all_modalities} + X %  MPA {top_view_modalities}  
+# # The above scoring metric aims to give a boost to solutions with inference on only 2 (top view) modalities.  
+
+# # use train_loader and test_loader      
+
+
+
+train_dataloader = train_loader          
+
+valid_dataloader = test_loader 
+
+# # torch.Size([20, 3, 32, 32])        
+# # torch.Size([20, 3, 32, 32])  
+# # torch.Size([20]) 
+
+
+
+print(next(iter(train_dataloader))[0].shape) 
+
+# Code for example DataLoader for the MapYourCity dataset
+
+print(next(iter(train_dataloader))[1].shape)
+
+print(next(iter(train_dataloader))[2].shape)
+
+print(next(iter(train_dataloader))[3].shape)
+
+# # For the DataLoader
+
+
+
+# print(next(iter(train_dataloader)))                
+
+# print(next(iter(train_dataloader))[0].shape)     
+
+# print(next(iter(train_dataloader))[3].shape)
+
+# # [0.3098, 0.2667, 0.2902,  ..., 0.4588, 0.4157, 0.8863],
+# #           [0.8745, 0.8667, 0.8667,  ..., 0.8941, 0.8824, 0.9765]]]]), tensor([4, 3, 0, 5, 4, 1, 3, 2, 4, 6, 4, 0, 3, 2, 4, 3, 4, 0, 0, 2])]
+# # torch.Size([20, 3, 1024, 512])
+# # torch.Size([20])
+
+# # [0.4784, 0.4784, 0.4784,  ..., 0.5176, 0.5216, 0.5255],
+# #           [0.4824, 0.4824, 0.4824,  ..., 0.5216, 0.5255, 0.5255]]]]), tensor([1, 5, 2, 4, 0, 2, 2, 2, 2, 5, 0, 4, 3, 5, 5, 1, 1, 5, 5, 1])]
+# # torch.Size([20, 3, 512, 512])         
+# # torch.Size([20])
+
+# # We use train_loader and test_loader.  
+
