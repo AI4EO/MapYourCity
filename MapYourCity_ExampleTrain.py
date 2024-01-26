@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-# # Main Lines: 584 and 1656      
+# # Main Lines: 584 and 1656       
 import imageio.v2 as io
 import matplotlib.pyplot as plt 
 FOLDER = '/Data/ndionelis/StreetDataset/'     
@@ -1699,22 +1699,12 @@ for epoch in range(120):  # # loop over the dataset multiple times
         # # tensor(2.0583, device='cuda:0', grad_fn=<NllLossBackward0>)    
         print("Loss:", loss.item())  
 
-        #if (epoch % 20 == 0) and (idx == 0):
         #if (epoch % 10 == 0) and (idx == 0):
-        #if (epoch % 5 == 0) and (idx == 0): 
-        #if (epoch % 1 == 0) and (idx == 0):   
-        if (epoch % 2 == 0) and (idx == 0):
+        if (epoch % 5 == 0) and (idx == 0): 
           accToCheck = validate(model)   
           if accToCheck > best_test_bpd:     
               best_test_bpd = accToCheck  
-              #torch.save(model.state_dict(), '/Data/ndionelis/forchalleclassif_bst.pt')                                  
-              #torch.save(model.state_dict(), '/Data/ndionelis/forchalleclassif')           
-              #torch.save(model.state_dict(), '/Data/ndionelis/chaClassiWithTopViewBest.pt')  
-              
-              #torch.save(model.state_dict(), '/Data/ndionelis/chaClassiWithTopViewBest2.pt')       
-              #torch.save(model.state_dict(), '/Data/ndionelis/chaClassiWiTopViewBst2.pt')  
-              #torch.save(model.state_dict(), '/Data/ndionelis/chaClassiWiTopVieBest4mfr.pt')     
-              torch.save(model.state_dict(), '/Data/ndionelis/chaClassiWiTopVieBest4mfr2.pt')  
+              torch.save(model.state_dict(), './modelB.pt')   
 
         # # # evaluate                       
         # with torch.no_grad(): 
@@ -1735,6 +1725,4 @@ for epoch in range(120):  # # loop over the dataset multiple times
         #   print("Mean_iou:", metrics["mean_iou"])
         #   print("Mean accuracy:", metrics["mean_accuracy"])
 
-#torch.save(model.state_dict(), '/Data/ndionelis/forchalcla1')                                                                   
-torch.save(model.state_dict(), '/Data/ndionelis/chaClassiWiTopVie4mfr2.pt') 
-
+torch.save(model.state_dict(), './model.pt') 
