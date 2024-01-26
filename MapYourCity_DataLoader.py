@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Example DataLoader for the MapYourCity dataset  
+# Example DataLoader for the MapYourCity dataset   
 # Use train_loader and test_loader    
 
 # Library imports  
@@ -10,7 +10,8 @@ import numpy as np
 import pandas as pd
 import rasterio 
 import os  
-# PyTorch
+import cv2
+# Use PyTorch
 import torch
 
 # Define the paths to the data   
@@ -43,7 +44,6 @@ mask = np.ones(names_data.size, dtype=bool)
 mask[idx] = False
 test_data = names_data[mask]
 
-import cv2
 class Dataset(torch.utils.data.Dataset):  
     def __init__(self, list_IDs):
         self.list_IDs = list_IDs 
