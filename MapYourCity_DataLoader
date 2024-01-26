@@ -12,28 +12,29 @@ import rasterio
 import os  
 import torch
 
-# Define paths to data   
+# Define the paths to the data   
 # input_path = "directory with MapYourCity image files" 
 input_path = "/Data/ndionelis/building-age-dataset/"
 train_path = input_path + "train/data/"
 test_path = input_path + "test/data/"
 
-# Load csv files
+# Load the csv files
 test_df = pd.read_csv(input_path + "test/test-set.csv")
 train_df = pd.read_csv(input_path + "train/train-set.csv")
 train_df.head()
 test_df.head() 
 
-names_data = os.listdir(train_path) # # to not load all data in a single tensor, load only the names                   
+names_data = os.listdir(train_path) # to not load all data in a single tensor, load only the names                    
 length_names = len(names_data)
 perm = torch.randperm(length_names)
-#idx = perm[:round(0.8*length_names)] # # # draw round(0.8*length_names) samples    
+#idx = perm[:round(0.8*length_names)] # draw round(0.8*length_names) samples     
 #torch.save(idx, 'indexForTrainVal.pt')      
 idx = torch.load('indexForTrainVal.pt')  
 
 names_data = np.array(names_data) 
 idx = idx.numpy() 
 training_data = names_data[idx]
+
 #test_data = names_data[~idx]         
 mask = np.ones(names_data.size, dtype=bool)  
 mask[idx] = False
@@ -41,7 +42,6 @@ test_data = names_data[mask]
 
 import cv2
 class Dataset(torch.utils.data.Dataset):  
-    #def __init__(self, list_IDs, labels):    
     def __init__(self, list_IDs):
         self.list_IDs = list_IDs
     def __len__(self):
