@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # Example DataLoader for the MapYourCity dataset  
-# use train_loader and test_loader    
+# Use train_loader and test_loader    
 
 # Library imports  
 import matplotlib.pyplot as plt
@@ -26,16 +26,18 @@ train_df.head()
 test_df.head() 
 
 names_data = os.listdir(train_path) # to not load all data in a single tensor, load only the names                    
-length_names = len(names_data)
+length_names = len(names_data) 
 perm = torch.randperm(length_names)
 #idx = perm[:round(0.8*length_names)] # draw round(0.8*length_names) samples     
 #torch.save(idx, 'indexForTrainVal.pt')      
 idx = torch.load('indexForTrainVal.pt')  
 
+# For the training data
 names_data = np.array(names_data) 
 idx = idx.numpy() 
 training_data = names_data[idx]
 
+# For the test data
 #test_data = names_data[~idx]         
 mask = np.ones(names_data.size, dtype=bool)  
 mask[idx] = False
@@ -73,11 +75,10 @@ test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE)
 #test_loader_iter = iter(test_loader) 
 #test_loader_iter_next = next(test_loader_iter)   
 
+# For the DataLoader
 # use train_loader and test_loader      
 train_dataloader = train_loader          
 valid_dataloader = test_loader 
-
-# For the DataLoader
 print(next(iter(train_dataloader))[0].shape) 
 print(next(iter(train_dataloader))[1].shape)
 print(next(iter(train_dataloader))[2].shape)
