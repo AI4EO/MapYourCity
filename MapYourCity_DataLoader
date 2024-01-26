@@ -4,75 +4,31 @@
 # # Example DataLoader for the MapYourCity dataset  
 # # use train_loader and test_loader    
 
-# # #MapYourCity    
-# This notebook showcases the #MapYourCity dataset structure and format. The three modalities are visualised and the distributions according to training labels, countries and cities is shown. We also present the format and evaluation metrics for challenge solution submission.
-# ## Dataset structure  
-# The dataset is divided into 2 collections, train and test. Each collection contains a csv file with a list of labeled building IDs (pid) and a data folder containing up to 3 images for every building (street view, orthophoto and Sentinel 2) and also the label for the training set. 
-# Dataset structure:
-# - /dataset
-#   - /train
-#     - train-set.csv
-#     - /data
-#       - /< pid >
-#         - label.txt
-#         - street.jpg
-#         - s2_l2a.tif
-#         - orthophoto.tif
-#   - /test
-#     - test-set.csv
-#     - /data
-#       - /< pid >
-#         - street.jpg (for 2 cities only) 
-#         - s2_l2a.tif 
-#         - orthophoto.tif
-# ## Image formats and structure     
-# # The dataset consists of three different image modalities and the labels for the training set:  
-# - streetview image in **jpg** format of pixel size 512 x 1024 showing the face-view of the building
-# - top-view orthophoto image in **tif** format of size of 512 x 512 pixels with pixel size of 0.5 m, covering an area of 256 x 256 squared metres around the building, with three bands (RGB)
-# - top-view Sentinel-2 L2A image **tif** format of size 64 x 64 with pixel size of 10 m, covering an area of 640 x 640 squared metres around the building, with 12 bands:
-# - - [Sentinel-2 L2A bands](https://docs.sentinel-hub.com/api/latest/data/sentinel-2-l2a/#available-bands-and-data): ["B01","B02", "B03", "B04","B05","B06","B07","B08","B8A","B09","B11","B12"]
-# - a **txt** file with labels. There are 7 different labels (classes) denoting 7 binned age of buildings.  
-# The images are loaded and visualised in the sections below. 
-# ## Load data 
 # # Imports  
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import rasterio 
+
 # # Define paths to data   
 # input_path = "directory with MapYourCity image files" 
-#input_path = "dataset/"  
-#input_path = "/home/ndionelis/building-age-dataset/"  
 input_path = "/Data/ndionelis/building-age-dataset/"
 train_path = input_path + "train/data/"
 test_path = input_path + "test/data/"
+
 # Load csv files
 test_df = pd.read_csv(input_path + "test/test-set.csv")
 train_df = pd.read_csv(input_path + "train/train-set.csv")
 # Check csv files
 train_df.head()
 test_df.head() 
-# ## Image visualisation      
-# # Choose a building by pid: 
-# pid = "225eklykc3"   
-# street = plt.imread(f"{train_path}{pid}/street.jpg") 
-# orthophoto = plt.imread(f"{train_path}{pid}/orthophoto.tif")
-# s2 = rasterio.open(f"{train_path}{pid}/s2_l2a.tif").read()
-# s2 = np.transpose(s2,[1,2,0])
-# #print("Image dimensions:")  
-# print(f"street view: {street.shape}" )
-# print(f"orthophoto: {orthophoto.shape}" )
-# print(f"Sentinel-2: {s2.shape}" )
+
 import os  
 names_data = os.listdir(train_path) # # to not load all data in a single tensor, load only the names                   
 length_names = len(names_data)
-# #print(names_data)        
-# print(length_names)   
 import torch
 perm = torch.randperm(length_names)
 #idx = perm[:round(0.8*length_names)] # # # draw round(0.8*length_names) samples    
-
-#idx = perm[:round(0.78571428571*length_names)] # # # draw round(0.78571428571*length_names) samples  
 #torch.save(idx, 'indexForTrainVal.pt')      
 idx = torch.load('indexForTrainVal.pt')  
 
