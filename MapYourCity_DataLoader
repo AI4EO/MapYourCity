@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Example DataLoader for the MapYourCity dataset  
-# # use train_loader and test_loader    
+# Example DataLoader for the MapYourCity dataset  
+# use train_loader and test_loader    
 
-# # Imports  
+# Library imports  
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import rasterio 
+import os  
+import torch
 
-# # Define paths to data   
+# Define paths to data   
 # input_path = "directory with MapYourCity image files" 
 input_path = "/Data/ndionelis/building-age-dataset/"
 train_path = input_path + "train/data/"
@@ -19,14 +21,11 @@ test_path = input_path + "test/data/"
 # Load csv files
 test_df = pd.read_csv(input_path + "test/test-set.csv")
 train_df = pd.read_csv(input_path + "train/train-set.csv")
-# Check csv files
 train_df.head()
 test_df.head() 
 
-import os  
 names_data = os.listdir(train_path) # # to not load all data in a single tensor, load only the names                   
 length_names = len(names_data)
-import torch
 perm = torch.randperm(length_names)
 #idx = perm[:round(0.8*length_names)] # # # draw round(0.8*length_names) samples    
 #torch.save(idx, 'indexForTrainVal.pt')      
