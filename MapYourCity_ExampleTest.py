@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
-# # The main lines are: 579 and 1699    
-# # to test: torch.save(model.state_dict(), '/Data/ndionelis/chaClassiWiTopVieBest4mfr.pt')  
+# # The main lines are: 579 and 1699     
+# to test: torch.save(model.state_dict(), './modelB.pt')  
 import imageio.v2 as io
 import matplotlib.pyplot as plt 
 FOLDER = '/Data/ndionelis/StreetDataset/'    
@@ -1571,8 +1571,8 @@ criterion = nn.CrossEntropyLoss()
 #optimizer = optim.Adam(model.parameters(), lr=1e-4, weight_decay=0.5e-3)                 
 optimizer = optim.Adam(model.parameters(), lr=1e-5, weight_decay=0.5e-3)     
 
-# # to test: torch.save(model.state_dict(), '/Data/ndionelis/chaClassiWiTopVieBest4mfr.pt')          
-model.load_state_dict(torch.load('/Data/ndionelis/chaClassiWiTopVieBest4mfr.pt')) 
+# to test: torch.save(model.state_dict(), './modelB.pt')          
+model.load_state_dict(torch.load('./modelB.pt')) 
 model.eval()   
 
 def test(model):      
@@ -1710,4 +1710,3 @@ validate(model) # # Val Acc: 69.53
 # # Mean of diagonals of Confusion Matrix: 66.00  
 
 #test(model)                    
-
