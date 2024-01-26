@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import rasterio 
 import os  
+# PyTorch
 import torch
 
 # Define the paths to the data   
@@ -43,9 +44,11 @@ test_data = names_data[mask]
 import cv2
 class Dataset(torch.utils.data.Dataset):  
     def __init__(self, list_IDs):
-        self.list_IDs = list_IDs
+        self.list_IDs = list_IDs 
+
     def __len__(self):
-        return len(self.list_IDs)
+        return len(self.list_IDs) 
+
     def __getitem__(self, index): 
         ID = self.list_IDs[index] 
         X = cv2.imread(train_path + ID + '/street.jpg')
@@ -58,11 +61,13 @@ class Dataset(torch.utils.data.Dataset):
         return X, X2, X3, y 
 
 BATCH_SIZE = 32 
+# For the training set
 train_set = Dataset(training_data.tolist()) 
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True)  
-# train_loader_iter = iter(train_loader)
-# train_loader_iter_next = next(train_loader_iter) 
+#train_loader_iter = iter(train_loader)
+#train_loader_iter_next = next(train_loader_iter) 
 
+# For the test set
 test_set = Dataset(test_data.tolist())  
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE)   
 #test_loader_iter = iter(test_loader) 
