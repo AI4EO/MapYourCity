@@ -62,7 +62,9 @@ class Dataset(torch.utils.data.Dataset):
         y = int(open(train_path + ID + '/label.txt', "r").read())
         return X, X2, X3, y 
 
+#BATCH_SIZE = 256
 BATCH_SIZE = 32 
+
 # For the training set
 train_set = Dataset(training_data.tolist()) 
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True)  
@@ -79,6 +81,8 @@ test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE)
 # use train_loader and test_loader      
 train_dataloader = train_loader          
 valid_dataloader = test_loader 
+
+# The sizes depend on BATCH_SIZE 
 print(next(iter(train_dataloader))[0].shape) 
 print(next(iter(train_dataloader))[1].shape)
 print(next(iter(train_dataloader))[2].shape)
