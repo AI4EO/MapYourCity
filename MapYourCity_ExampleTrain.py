@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
-# # Main Lines: 584 and 1656       
-import imageio.v2 as io
+# # Main Lines: 314 and 840          
+import imageio.v2 as io 
 import matplotlib.pyplot as plt 
 FOLDER = '/Data/ndionelis/StreetDataset/'     
 import torchvision            
@@ -19,202 +19,14 @@ WINDOW_SIZE = (600, 600)
 # image1 = torchvision.io.read_image(FOLDER+'0/0_00_311059203.jpg')         
 # x1, x2, y1, y2 = get_random_pos(image1, WINDOW_SIZE)   
 # image1 = image1[:, x1:x2,y1:y2]
-# fig = plt.figure()     
 # plt.imshow(image1.permute(1, 2, 0))   
-# image1 = torchvision.io.read_image(FOLDER+'0/0_00_311059203.jpg') 
-# applier = torchvision.transforms.RandomCrop(600) 
-# image1 = applier(image1) 
-# fig = plt.figure()
-# plt.imshow(image1.permute(1, 2, 0)) 
-# img = io.imread(FOLDER+'0/0_00_311059203.jpg')
-# fig = plt.figure()
-# plt.imshow(img)
-# image1 = torchvision.io.read_image(FOLDER+'0/0_00_311059203.jpg')
-# applier = torchvision.transforms.CenterCrop(800)
-# image1 = applier(image1)
-# fig = plt.figure()
-# plt.imshow(image1.permute(1, 2, 0))
-# img = io.imread(FOLDER+'0/0_00_311059203.jpg')
-# fig = plt.figure()
-# plt.imshow(img)
-# #plt.savefig('ExampleImage1.png')
-# image1 = torchvision.io.read_image(FOLDER+'1/0_00_311041905.jpg')
-# applier = torchvision.transforms.CenterCrop(800)
-# image1 = applier(image1)
-# fig = plt.figure()
-# plt.imshow(image1.permute(1, 2, 0))
-# img = io.imread(FOLDER+'1/0_00_311041905.jpg')
-# fig = plt.figure()
-# plt.imshow(img)
-# #plt.savefig('ExampleImage2.png') 
 
 # #!pip install -q transformers datasets
-# #import requests, zipfile, io  
-# import requests, zipfile, io
-# def download_data():
-#     url = "https://www.dropbox.com/s/l1e45oht447053f/ADE20k_toy_dataset.zip?dl=1"
-#     r = requests.get(url)
-#     z = zipfile.ZipFile(io.BytesIO(r.content))
-#     z.extractall()
-# download_data()
-
-# from datasets import load_dataset 
-# load_entire_dataset = False  
-# if load_entire_dataset:
-#   dataset = load_dataset("scene_parse_150")
-
-# from torch.utils.data import Dataset
-# import os
-# from PIL import Image
-# class SemanticSegmentationDataset(Dataset):
-#     def __init__(self, root_dir, feature_extractor, train=True):
-#         self.root_dir = root_dir
-#         self.feature_extractor = feature_extractor
-#         self.train = train
-#         sub_path = "training" if self.train else "validation"
-#         self.img_dir = os.path.join(self.root_dir, "images", sub_path)
-#         self.ann_dir = os.path.join(self.root_dir, "annotations", sub_path)
-#         # read images
-#         image_file_names = []
-#         for root, dirs, files in os.walk(self.img_dir):
-#           image_file_names.extend(files)
-#         self.images = sorted(image_file_names)
-#         # read annotations
-#         annotation_file_names = []
-#         for root, dirs, files in os.walk(self.ann_dir):
-#           annotation_file_names.extend(files)
-#         self.annotations = sorted(annotation_file_names)
-#         assert len(self.images) == len(self.annotations), "There must be as many images as there are segmentation maps"
-#     def __len__(self):
-#         return len(self.images)
-#     def __getitem__(self, idx):
-#         image = Image.open(os.path.join(self.img_dir, self.images[idx]))
-#         segmentation_map = Image.open(os.path.join(self.ann_dir, self.annotations[idx]))
-#         # randomly crop + pad both image and segmentation map to same size
-#         encoded_inputs = self.feature_extractor(image, segmentation_map, return_tensors="pt")
-#         for k,v in encoded_inputs.items():
-#           encoded_inputs[k].squeeze_() # remove batch dimension
-#         return encoded_inputs
-
-# from transformers import SegformerFeatureExtractor
-# #root_dir = '/content/ADE20k_toy_dataset'
-# root_dir = './ADE20k_toy_dataset'
-# feature_extractor = SegformerFeatureExtractor(reduce_labels=True)
-# train_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor)
-# valid_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor, train=False)
-# print("Number of training examples:", len(train_dataset))
-# print("Number of validation examples:", len(valid_dataset))
-
-# encoded_inputs = train_dataset[0]
-# encoded_inputs["pixel_values"].shape
-# encoded_inputs["labels"].shape
-# encoded_inputs["labels"]
-# encoded_inputs["labels"].squeeze().unique()
-
-# from torch.utils.data import DataLoader
-# train_dataloader = DataLoader(train_dataset, batch_size=2, shuffle=True)
-# valid_dataloader = DataLoader(valid_dataset, batch_size=2)
-# batch = next(iter(train_dataloader))
-# for k,v in batch.items():
-#   print(k, v.shape)
-# batch["labels"].shape
-# mask = (batch["labels"] != 255)
-# mask
-# batch["labels"][mask]
-
-# #from transformers import SegformerForSemanticSegmentation
-# from transformers import SegformerForImageClassification
-# import json
-# from huggingface_hub import cached_download, hf_hub_url
-
-# # load id2label mapping from a JSON on the hub
-# #repo_id = "datasets/huggingface/label-files"
-# #repo_id = "./drive/MyDrive"
-# #filename = "ade20k-id2label.json"
-# #id2label = json.load(open(cached_download(hf_hub_url(repo_id, filename)), "r"))
-# #id2label = json.load(open("./drive/MyDrive/ade20k-id2label.json", "r"))
-# id2label = json.load(open("./pytorch-msssim/ade20k-id2label.json", "r"))
-# id2label = {int(k): v for k, v in id2label.items()}
-# label2id = {v: k for k, v in id2label.items()}
-
-# # define model
-# # model = SegformerForSemanticSegmentation.from_pretrained("nvidia/mit-b0",
-# #                                                          num_labels=150,
-# #                                                          id2label=id2label,
-# #                                                          label2id=label2id,
-# # )
-# # model = SegformerForImageClassification.from_pretrained("nvidia/mit-b0",
-# #                                                          num_labels=1000,
-# #                                                          id2label=id2label,
-# #                                                          label2id=label2id,
-# # ) 
-# # model2 = SegformerForImageClassification.from_pretrained("nvidia/mit-b0",
-# #                                                          num_labels=1000,
-# #                                                          id2label=id2label,
-# #                                                          label2id=label2id,
-# # )  
-# id2label = {0 : '1920',
-#             1 : '1940',
-#             2 : '1950',
-#             3 : '1970',
-#             4 : '1980',
-#             5 : '2000',
-#             6 : '2010'}  
-# label2id = {v: k for k, v in id2label.items()} 
-# # model = SegformerForImageClassification.from_pretrained("nvidia/mit-b0", 
-# #                                                          num_labels=7, 
-# #                                                          id2label=id2label, 
-# #                                                          label2id=label2id, 
-# #                                                          ignore_mismatched_sizes=True, 
-# # )      
-# # model = SegformerForImageClassification.from_pretrained("nvidia/mit-b5", 
-# #                                                          num_labels=7, 
-# #                                                          id2label=id2label, 
-# #                                                          label2id=label2id, 
-# #                                                          ignore_mismatched_sizes=True, 
-# # ) 
-# #config =  AutoConfig.from_pretrained('..config.json', local_files_only=True)   
-# #model = TFViTModel.from_config(config)
-
-# #net_dict = self.net.state_dict()   
-# #ae_net_dict = self.ae_net.state_dict()
-# ## Filter out decoder network keys
-# #ae_net_dict = {k: v for k, v in ae_net_dict.items() if k in net_dict}
-# ## Overwrite values in the existing state_dict
-# #net_dict.update(ae_net_dict)
-# ## Load the new state_dict 
-# #self.net.load_state_dict(net_dict)
-
-# from datasets import load_metric 
-# #metric = load_metric("mean_iou")      
-# metric = load_metric("accuracy") 
-# import torch
-# from torch import nn
-# from sklearn.metrics import accuracy_score
-# from tqdm.notebook import tqdm
-# import torchvision.transforms as T  
-# # define optimizer  
-# #optimizer = torch.optim.AdamW(model.parameters(), lr=0.00006)  
-# optimizer = torch.optim.AdamW(model.parameters(), lr=0.00006)
-# # move model to GPU
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# model.to(device)
-# model.train() 
-
-#train_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor)           
-#valid_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor, train=False)
-#train_dataloader = DataLoader(train_dataset, batch_size=2, shuffle=True) 
-#valid_dataloader = DataLoader(valid_dataset, batch_size=2)
-#train_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor)
-#valid_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor, train=False)
-#train_dataloader = DataLoader(train_dataset, batch_size=2, shuffle=True) 
-#valid_dataloader = DataLoader(valid_dataset, batch_size=2)
-#train_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor)                
-#valid_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor, train=False)
-#train_dataloader = DataLoader(train_dataset, batch_size=2, shuffle=True) 
-#valid_dataloader = DataLoader(valid_dataset, batch_size=2)
-
-# # For the AI4EO Hackathon Street-level Dataset                                   
+#import requests, zipfile, io
+#from datasets import load_dataset 
+#from torch.utils.data import Dataset
+#from PIL import Image
+#from datasets import load_metric 
 import os          
 import imageio.v2 as io
 import shutil
@@ -235,25 +47,13 @@ import torchvision
 
 FOLDER = '/Data/ndionelis/StreetDataset/'             
 MAINFOLDER = '/Data/ndionelis/'   
-# This is for the AI4EO Hackathon Street-level Dataset.  
 #NUMWORKERS = 6                    
 NUMWORKERS = 0 
 #BATCH_SIZE = 256        
-#BATCH_SIZE = 10
-#BATCH_SIZE = 64  
-#BATCH_SIZE = 20
 BATCH_SIZE = 32
 #epochs = 200       
-#epochs = 10   
-#epochs = 50    
-#epochs = 100  
 epochs = 120
-# data_dir2 = MAINFOLDER + 'TheRest/'                 
-# #os.rmdir(data_dir2)   
-# shutil.rmtree(data_dir2) 
-#SEED = 17        
 SEED = random.randint(1, 10000)
-#print(SEED)    
 print('The random seed is: ' + str(SEED) + '.')  
 torch.cuda.empty_cache()
 random.seed(SEED)
@@ -261,48 +61,6 @@ np.random.seed(SEED)
 torch.manual_seed(SEED)   
 torch.cuda.manual_seed_all(SEED)
 
-# data_transforms = {
-#     'train': transforms.Compose([
-#         transforms.Resize((512, 512)),
-#         transforms.ToTensor(),
-#     ]),
-#     'val': transforms.Compose([
-#         transforms.Resize((512, 512)),
-#         transforms.ToTensor(),
-#     ]),
-#     'test': transforms.Compose([
-#         transforms.Resize((512, 512)),
-#         transforms.ToTensor(),
-#     ]),
-# }   
-# data_transforms = {
-#     'train': transforms.Compose([
-#         transforms.Resize((256, 256)),
-#         transforms.ToTensor(),
-#     ]),
-#     'val': transforms.Compose([
-#         transforms.Resize((256, 256)),
-#         transforms.ToTensor(),
-#     ]),
-#     'test': transforms.Compose([
-#         transforms.Resize((256, 256)),
-#         transforms.ToTensor(),
-#     ]),
-# }                  
-# data_transforms = {
-#     'train': transforms.Compose([
-#         transforms.Resize((256, 256)),
-#         transforms.ToTensor(),
-#     ]),
-#     'val': transforms.Compose([
-#         transforms.Resize((256, 256)), 
-#         transforms.ToTensor(), 
-#     ]),
-#     'test': transforms.Compose([ 
-#         transforms.Resize((256, 256)), 
-#         transforms.ToTensor(),  
-#     ]),
-# }       
 data_transforms = {
     'train': transforms.Compose([
         transforms.Resize((512, 512)),
@@ -321,28 +79,21 @@ data_dir = MAINFOLDER + 'TheNewDataset'
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
                                         data_transforms[x])
                 for x in ['train', 'val', 'test']}    
-# We have used random uniform sampling for the training and test sets split.                                                 
-#print('Length of training set: ' + str(len(image_datasets['train'])))           
+train_dataset = image_datasets['train']             
+valid_dataset = image_datasets['test']  
 print('Length of training set: ' + str(len(image_datasets['train'])))     
 print('Length of validation set: ' + str(len(image_datasets['val'])))
 print('Length of test set: ' + str(len(image_datasets['test'])))
 
-train_dataset = image_datasets['train']             
-valid_dataset = image_datasets['test']  
-
 dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=BATCH_SIZE,
                                             shuffle=True, num_workers=NUMWORKERS) 
             for x in ['train', 'val', 'test']}
-
 train_dataloader = dataloaders['train']      
 valid_dataloader = dataloaders['test'] 
-#del dataloaders['test']                             
-#del image_datasets['test']  
 
 labels = np.array(dataloaders['train'].dataset.targets) 
 lb = LabelEncoder() 
 labels = lb.fit_transform(labels)
-#print(f"Total Number of Classes: {7}")                        
 print(f"Total Number of Classes: {len(lb.classes_)}") 
 device = torch.device("cuda:0")
 print('Device: ' + str(device))   
@@ -371,17 +122,7 @@ def a9g9a9e9a9t9alaoader_CIFAR10(train, batch_size, augmentation, dataloader_kwa
     #             file2))
     #         resize2 = fn.resize(img2, size=(512, 512))
     #         resize = np.concatenate((resize, resize2))
-    #         # plt.figure()
     #         # plt.imshow(resize)
-    #         # #plt.imshow(resize2) 
-    #         # plt.show()
-    #         # #plt.savefig('ForTheChalle1.png')    
-    #         # plt.savefig('ForTheChalle2.png')
-    #         break 
-    #     # # For debugging purposes only 
-    #     # # To be removed
-    #     if np.shape(resize)[0] == 512:
-    #         continue
     dset.targets = torch.load('/Data/ndionelis/dtsettargets0.pt') 
     dset.data = torch.load('/Data/ndionelis/dtsetdata0a.pt')
     dset.data = np.concatenate((dset.data, torch.load('/Data/ndionelis/dtsetdata0b.pt')), axis=0)
@@ -399,7 +140,6 @@ def a9g9a9e9a9t9alaoader_CIFAR10(train, batch_size, augmentation, dataloader_kwa
     dset.data = np.concatenate((dset.data, torch.load('/Data/ndionelis/dtsetdata6.pt')), axis=0)   
     length_names = len(dset)
     perm = torch.load('/Data/ndionelis/chaClassiTopVperm.pt')
-    #idx = perm[:round(0.8*length_names)] # draw round(0.8*length_names) samples   
     idx = perm[:round(0.7*length_names)] # draw round(0.7*length_names) samples
     #names_data = np.array(names_data)
     idx = idx.numpy()
@@ -481,14 +221,7 @@ def nnewa9g9a9e9a9t9alaoader_CIFAR10(train, batch_size, augmentation, dataloader
     #                 #continue  
     #             resize2 = fn.resize(img2, size=(32, 32))
     #             resize = np.concatenate((resize, resize2))
-    #             # plt.figure() 
     #             # plt.imshow(resize)
-    #             # #plt.imshow(resize2)  
-    #             # plt.show()
-    #             # #plt.savefig('ForTheChalle1.png')              
-    #             # plt.savefig('ForTheChalle2.png') 
-    #             break 
-    # #torch.save(6 * torch.ones((np.shape(total_pil_to_tensor2)[0]), dtype=torch.int64), '/Data/ndionelis/alltargets6.pt')                           
     dset.targets = torch.load('/Data/ndionelis/alltargets0.pt') 
     # #torch.save(total_pil_to_tensor2, '/Data/ndionelis/alldata6.pt')  
     dset.data = torch.load('/Data/ndionelis/alldata0.pt') 
@@ -571,55 +304,19 @@ augmentation_train_in = {
     ]),
 }  
 dataloader_kwargs = {'num_workers': 0} 
-# dataloaders['train'], dataloaders['val'], dataloaders['test'], image_datasets['train'], image_datasets['val'], image_datasets['test'] = a9g9a9e9a9t9alaoader_CIFAR10(train=True, batch_size=BATCH_SIZE,
-#                                            augmentation=augmentation_train_in,
-#                                            dataloader_kwargs=dataloader_kwargs)  
 dataloaders['train'], dataloaders['val'], dataloaders['test'], image_datasets['train'], image_datasets['val'], image_datasets['test'] = nnewa9g9a9e9a9t9alaoader_CIFAR10(train=True, batch_size=BATCH_SIZE,
                                            augmentation=augmentation_train_in,
                                            dataloader_kwargs=dataloader_kwargs)
 train_dataloader = dataloaders['train']         
 valid_dataloader = dataloaders['test']
 
-# # use train_loader and test_loader  
-# # #MapYourCity   
-# This notebook showcases the #MapYourCity dataset structure and format. The three modalities are visualised and the distributions according to training labels, countries and cities is shown. We also present the format and evaluation metrics for challenge solution submission.
-# ## Dataset structure  
-# The dataset is divided into 2 collections, train and test. Each collection contains a csv file with a list of labeled building IDs (pid) and a data folder containing up to 3 images for every building (street view, orthophoto and Sentinel 2) and also the label for the training set. 
-# Dataset structure:
-# - /dataset
-#   - /train
-#     - train-set.csv
-#     - /data
-#       - /< pid >
-#         - label.txt
-#         - street.jpg
-#         - s2_l2a.tif
-#         - orthophoto.tif
-#   - /test
-#     - test-set.csv
-#     - /data
-#       - /< pid >
-#         - street.jpg (for 2 cities only)
-#         - s2_l2a.tif
-#         - orthophoto.tif
-# ## Image formats and structure    
-# # The dataset consists of three different image modalities and the labels for the training set:  
-# - streetview image in **jpg** format of pixel size 512 x 1024 showing the face-view of the building
-# - top-view orthophoto image in **tif** format of size of 512 x 512 pixels with pixel size of 0.5 m, covering an area of 256 x 256 squared metres around the building, with three bands (RGB)
-# - top-view Sentinel-2 L2A image **tif** format of size 64 x 64 with pixel size of 10 m, covering an area of 640 x 640 squared metres around the building, with 12 bands:
-# - - [Sentinel-2 L2A bands](https://docs.sentinel-hub.com/api/latest/data/sentinel-2-l2a/#available-bands-and-data): ["B01","B02", "B03", "B04","B05","B06","B07","B08","B8A","B09","B11","B12"]
-# - a **txt** file with labels. There are 7 different labels (classes) denoting 7 binned age of buildings.  
-# The images are loaded and visualised in the sections below. 
-# ## Load data 
-# # Imports  
+# use train_loader and test_loader  
+# #MapYourCity   
+# Imports  
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import rasterio 
-# # Define paths to data   
-# input_path = "directory with MapYourCity image files" 
-#input_path = "dataset/"  
-#input_path = "/home/ndionelis/building-age-dataset/"  
 input_path = "/Data/ndionelis/building-age-dataset/"
 train_path = input_path + "train/data/"
 test_path = input_path + "test/data/"
@@ -629,282 +326,60 @@ train_df = pd.read_csv(input_path + "train/train-set.csv")
 # Check csv files
 train_df.head()
 test_df.head() 
-# ## Image visualisation      
-# # Choose a building by pid:  
-# pid = "225eklykc3"   
-# street = plt.imread(f"{train_path}{pid}/street.jpg") 
-# orthophoto = plt.imread(f"{train_path}{pid}/orthophoto.tif")
-# s2 = rasterio.open(f"{train_path}{pid}/s2_l2a.tif").read()
-# s2 = np.transpose(s2,[1,2,0])
-# #print("Image dimensions:")  
-# print(f"street view: {street.shape}" )
-# print(f"orthophoto: {orthophoto.shape}" )
-# print(f"Sentinel-2: {s2.shape}" )
-import os  
 names_data = os.listdir(train_path) # # to not load all data in a single tensor, load only the names                    
 length_names = len(names_data)
-# #print(names_data)          
-# print(length_names)   
-import torch
 perm = torch.randperm(length_names)
 #idx = perm[:round(0.8*length_names)] # # # draw round(0.8*length_names) samples     
-#idx = perm[:round(0.78571428571*length_names)] # # # draw round(0.78571428571*length_names) samples 
 #torch.save(idx, 'indexForTrainVal.pt')       
 idx = torch.load('indexForTrainVal.pt')  
 names_data = np.array(names_data)
 idx = idx.numpy() 
-#if '8nsfrlzxdn' in names_data[idx]:  
 training_data = names_data[idx]
-#print(training_data)       
-#print(len(training_data))  
 #test_data = names_data[~idx]         
 mask = np.ones(names_data.size, dtype=bool) 
 mask[idx] = False
 test_data = names_data[mask]
-#print(test_data[6058])
-test_data = [x for i,x in enumerate(test_data) if i!=6058]
-#print(test_data[6058])
-#for i in range(len(test_data)):    
-#    if test_data[i] == '8nsfrlzxdn':   
-#        print(i) 
-#if '8nsfrlzxdn' in test_data:   
-#print(len(test_data))   
 
 # we use train_loader and test_loader    
 #from PIL import Image    
 import cv2 
 class Dataset(torch.utils.data.Dataset):  
-    #def __init__(self, list_IDs, labels):    
     def __init__(self, list_IDs):
-        #self.labels = labels
         self.list_IDs = list_IDs
     def __len__(self):
         return len(self.list_IDs)
     def __getitem__(self, index): 
         ID = self.list_IDs[index] 
-        #X = torch.load('data/' + ID + '.pt')       
-        #print(train_path + ID + '/street.jpg')
-        #X = torch.load(train_path + ID + '/street.jpg')                        
-        #X = plt.imread(train_path + ID + '/street.jpg')   
         X = cv2.imread(train_path + ID + '/street.jpg')
-        #print(ID) 
-        #print(np.shape(X))  
-        #X2 = cv2.imread(train_path + ID + '/orthophoto.tif')
-        #X3 = rasterio.open(train_path + ID + '/s2_l2a.tif').read() 
-        #print(np.shape(X2))  
-        #print(np.shape(X3)) 
         X = cv2.resize(X, (256, 256)) 
-        #X = cv2.resize(X, (512, 512))         
-        #X = cv2.resize(X, (1024, 1024)) 
         X2 = cv2.imread(train_path + ID + '/orthophoto.tif')  
         X2 = cv2.resize(X2, (256, 256)) 
         X3 = rasterio.open(train_path + ID + '/s2_l2a.tif').read() 
         X3 = np.transpose(X3, [1, 2, 0]) 
-        #X = Image.open(train_path + ID + '/street.jpg')             
-        #print(X.shape)    
-        #print(np.size(X))   
-        # # (783, 1024, 3)                   
-        # # (512, 1024, 3)  
-        #y = self.labels[ID]     
-        #y = 1    
-        #y = open(train_path + ID + '/label.txt', "r").read()  
         y = int(open(train_path + ID + '/label.txt', "r").read())
-        #return X, y 
-        #return X, X2, y  
         return X, X2, X3, y 
-        #return X      
-# f = open("demofile.txt", "r")     
-# print(f.read())  
-# street = plt.imread(f"{train_path}{pid}/street.jpg")         
-# orthophoto = plt.imread(f"{train_path}{pid}/orthophoto.tif")  
-# s2 = rasterio.open(f"{train_path}{pid}/s2_l2a.tif").read() 
-# s2 = np.transpose(s2, [1, 2, 0])
-# print(f"street view: {street.shape}" )  
-# print(f"orthophoto: {orthophoto.shape}" )
-# print(f"Sentinel-2: {s2.shape}" )  
-BATCH_SIZE = 32 
-#print(training_data.tolist()[0])  
-#print(len(training_data.tolist()[0])) 
-#train_set = Dataset(training_data)       
 train_set = Dataset(training_data.tolist()) 
-#print(len(train_set))  
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True)  
-#train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE) 
-# train_loader_iter = iter(train_loader)
-# train_loader_iter_next = next(train_loader_iter) 
-# #train_loader_iter_next, train_loader_iter_next2 = train_loader_iter_next       
-# #train_loader_iter_next, train_loader_iter_next2, train_loader_iter_next3 = train_loader_iter_next    
-# train_loader_iter_next, train_loader_iter_next2, train_loader_iter_next3, train_loader_iter_next4 = train_loader_iter_next
-# print('')         
-# #print(train_loader_iter_next)                    
-# #print(train_loader_iter_next2)   
-# #print(train_loader_iter_next3) 
-# print(train_loader_iter_next4)
-# print(train_loader_iter_next.shape)     
-# print(train_loader_iter_next2.shape)
-# print(train_loader_iter_next3.shape)
-# print(train_loader_iter_next4.shape) 
-#print('')             
-# #print(train_loader_iter_next)                       
-# #print(train_loader_iter_next2)      
-# #print(train_loader_iter_next3) 
-# print(train_loader_iter_next4)
-# print(train_loader_iter_next4)  
-# print(train_loader_iter_next.shape)  
-# print(train_loader_iter_next2.shape) 
-# print(train_loader_iter_next3.shape)
-# print(train_loader_iter_next4.shape)
 
-#test_set = Dataset(test_data.tolist())        
 test_set = Dataset(test_data)  
-#print(len(test_set))     
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE)   
-#test_loader_iter = iter(test_loader) 
-#test_loader_iter_next = next(test_loader_iter)   
-#test_loader_iter_next, test_loader_iter_next2, test_loader_iter_next3, test_loader_iter_next4 = test_loader_iter_next 
+# use train_loader and test_loader              
 
-# # use train_loader and test_loader              
-
-# # after test_loader      
+# after test_loader      
 names_data2 = os.listdir(test_path) # to not load all data in a single tensor, load only the names                         
-#length_names2 = len(names_data2) 
-# #print(names_data2)           
-# print(length_names2)    
-#names_data2 = np.array(names_data2) 
 test_data2 = np.array(names_data2) 
-#test_data2 = names_data2  
 test_set2 = Dataset(test_data2.tolist())
 test_loader2 = torch.utils.data.DataLoader(test_set2, batch_size=BATCH_SIZE) 
 
-# print(test_loader_iter_next4)        
-# print(test_loader_iter_next.shape)    
-# print(test_loader_iter_next2.shape) 
-# print(test_loader_iter_next3.shape)
-# print(test_loader_iter_next4.shape)
-
-# tensor([0, 4, 3, 2, 0, 3, 3, 6, 0, 1, 0, 4, 0, 3, 3, 6, 2, 3, 6, 5, 2, 4, 4, 0,
-#         6, 6, 4, 4, 6, 4, 5, 6])    
-# torch.Size([32, 256, 256, 3])  
-# torch.Size([32, 512, 512, 3])
-# torch.Size([32, 64, 64, 12])
-# torch.Size([32]) 
-# tensor([1, 5, 3, 0, 4, 4, 0, 4, 3, 5, 2, 0, 6, 6, 0, 2, 6, 6, 3, 6, 1, 1, 6, 4,
-#         4, 1, 5, 2, 3, 5, 0, 0])      
-# torch.Size([32, 256, 256, 3])   
-# torch.Size([32, 512, 512, 3]) 
-# torch.Size([32, 64, 64, 12])
-# torch.Size([32]) 
-# tensor([3, 3, 2, 0, 3, 2, 0, 1, 4, 4, 0, 5, 0, 0, 0, 1, 2, 3, 2, 2, 3, 4, 4, 0,
-#         0, 0, 0, 4, 2, 0, 5, 0]) 
-# torch.Size([32, 256, 256, 3]) 
-# torch.Size([32, 512, 512, 3])
-# torch.Size([32, 64, 64, 12])
-# torch.Size([32])
-# # Show the 3 modalities - street view, orthophoto and Sentinel-2   
-# fig, axs = plt.subplots(figsize=(15, 15), ncols = 3) 
-# axs[0].imshow(street)
-# axs[1].imshow(orthophoto)
-# axs[2].imshow(s2[...,[3,2,1]]*3e-4) 
-# axs[0].set_title("Street")
-# axs[1].set_title("Orthophoto")
-# axs[2].set_title("Sentinel-2-L2A");
-# # Relative position and size of orthophoto and Sentinel-2 images, with building location (blue dot)  
-# plt.figure(figsize=(7,7))
-# plt.imshow(s2[...,[3,2,1]]*3e-4, extent=(-320, 320, -320, 320))
-# plt.imshow(orthophoto, extent=(-128, 128, -128, 128))
-# plt.plot(0,0, "b", marker = "o", markersize = 8 ) # building location
-# plt.title(" Orthophoto and Sentinel-2 images, with building location in the centre (blue dot)")
-# plt.xlabel("distance (m)")
-# plt.ylabel("distance (m)")
-# plt.plot();
-# # ## Data exploration
-# # Plot the distribution by age classes(labels), countries and cities
-# fig, axs = plt.subplots(figsize=(12, 4), ncols=3)
-# train_df["label"].value_counts(sort=False).sort_index().plot(kind="bar", ax = axs[0])
-# train_df["country_id"].value_counts(sort=False).plot(kind="bar", ax = axs[1])
-# train_df["city_id"].value_counts(sort=False).plot(kind="bar",ax = axs[2])
-# axs[0].set_title("Distribution by 7 age classes (labels)")
-# axs[0].set_xlabel("Binned age class (label)")
-# axs[1].set_title("Distribution by countries")
-# axs[1].set_xlabel("Country code")
-# axs[2].set_title("Distribution by cities")
-# axs[2].set_xlabel("City code");
-# # # Submission format
-# # To submit your solution, create a csv file with building IDs (pid) and corresponding result labels (as shown in dummy example below), created by running your trained model on the test dataset.
-# res_df = test_df.copy()
-# res_df["predicted_label"]= np.random.randint(0,6,res_df.shape[0])
-# res_df.head()
-# # Save solution to csv 
-# res_df.to_csv("example_result.csv") 
-# # # Evaluation metrics 
-# # Solutions will be evaluated according to the [Mean Producer Accuracy](https://pages.cms.hu-berlin.de/EOL/geo_rs/S10_Accuracy_assessment.html#Producer%E2%80%99s_Accuracy__Omission_Error) (MPA: the average of diagonal elements of the 7-class confusion matrix) according to:
-# # ### MPA {all_modalities} + X %  MPA {top_view_modalities}  
-# # The above scoring metric aims to give a boost to solutions with inference on only 2 (top view) modalities.  
-
-# # use train_loader and test_loader      
-
-
-
-# train_dataloader = train_loader           
-
-# valid_dataloader = test_loader 
-
-# # # torch.Size([20, 3, 32, 32])       
-# # # torch.Size([20, 3, 32, 32])  
-# # # torch.Size([20])  
-
-
-
-
-
 train_dataloader = train_loader          
-
 valid_dataloader = test_loader
 
-
-
-# print(next(iter(train_dataloader)))                  
-
-# print(next(iter(train_dataloader))[0].shape)     
-
-# print(next(iter(train_dataloader))[3].shape)
-
-# # [0.3098, 0.2667, 0.2902,  ..., 0.4588, 0.4157, 0.8863],
-# #           [0.8745, 0.8667, 0.8667,  ..., 0.8941, 0.8824, 0.9765]]]]), tensor([4, 3, 0, 5, 4, 1, 3, 2, 4, 6, 4, 0, 3, 2, 4, 3, 4, 0, 0, 2])]
-# # torch.Size([20, 3, 1024, 512])
-# # torch.Size([20])
-
-# # [0.4784, 0.4784, 0.4784,  ..., 0.5176, 0.5216, 0.5255],
-# #           [0.4824, 0.4824, 0.4824,  ..., 0.5216, 0.5255, 0.5255]]]]), tensor([1, 5, 2, 4, 0, 2, 2, 2, 2, 5, 0, 4, 3, 5, 5, 1, 1, 5, 5, 1])]
-# # torch.Size([20, 3, 512, 512])         
-# # torch.Size([20])   
-
-
-
-
-
-#train_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor)                                   
-#valid_dataset = SemanticSegmentationDataset(root_dir=root_dir, feature_extractor=feature_extractor, train=False)
-
-#train_dataloader = DataLoader(train_dataset, batch_size=2, shuffle=True)   
-#valid_dataloader = DataLoader(valid_dataset, batch_size=2)
-
-
-
-
-
-
-
 def cutout(data) :
-    #min_k, max_k = 10, 20           
-    #min_k, max_k = 50, 80  
-    #min_k, max_k = 70, 110    
-    #min_k, max_k = 9, 16  
     min_k, max_k = 90, 170
     data = data.clone()
     h, w = data.size(2), data.size(3)
     b_size = data.size(0)
-    for i in range(b_size) :
+    for i in range(b_size): 
         k = (min_k + (max_k - min_k) * torch.rand(1)).long().item() 
         #k = 40 
         h_pos = ((h - k) * torch.rand(1)).long().item()
@@ -915,103 +390,9 @@ def cutout(data) :
         data[i,:,h_pos:h_pos+k,w_pos:w_pos+k] = torch.ones_like(patch) * patch_mean
     return data
 
-
-
-
-
-# # ResNet model   
-# #class ResNet34(nn.Module):      
-# class ResNet152(nn.Module):
-#     def __init__(self, pretrained):
-#         #super(ResNet34, self).__init__()         
-#         super(ResNet152, self).__init__()
-#         #super(ResNet18, self).__init__() 
-
-#         #self.model = pretrainedmodels.__dict__['resnet152'](pretrained='imagenet')                    
-#         #self.model = torchvision.models.resnet152(pretrained=True)                       
-#         class MyResNet18(nn.Module):
-#             def __init__(self, resnet):
-#                 super().__init__()
-#                 # # # # create features branch using https://github.com/pytorch/vision/blob/2a52c2dca73513d0d0c3e2a505aed05e5b9aa792/torchvision/models/resnet.py#L230-L246
-#                 self.features = nn.Sequential(
-#                     resnet.conv1,
-#                     resnet.bn1,
-#                     resnet.relu,
-#                     resnet.maxpool,
-#                     resnet.layer1,
-#                     resnet.layer2,
-#                     resnet.layer3,
-#                     resnet.layer4
-#                 )
-#                 self.avgpool = resnet.avgpool
-#                 self.fc = resnet.fc
-
-#             def _forward_impl(self, x: torch.Tensor) -> torch.Tensor:
-#                 # # # See note [TorchScript super()]  
-#                 x = self.features(x)
-#                 x = self.avgpool(x)
-#                 x = torch.flatten(x, 1)
-#                 x = self.fc(x)
-#                 return x
-
-#             def forward(self, x: torch.Tensor) -> torch.Tensor:
-#                 return self._forward_impl(x)
-
-#         #model = torchvision.models.resnet152(pretrained=True)   
-#         model = torchvision.models.resnet18(pretrained=True)
-#         self.model = MyResNet18(model)
-#         # if pretrained is True:
-#         #     #self.model = pretrainedmodels.__dict__['resnet34'](pretrained='imagenet')  
-#         #     self.model = pretrainedmodels.__dict__['resnet152'](pretrained='imagenet')
-#         # else:
-#         #     #self.model = pretrainedmodels.__dict__['resnet34'](pretrained=None) 
-#         #     self.model = pretrainedmodels.__dict__['resnet152'](pretrained=None) 
-#         # change the classification layer
-#         # self.l0 = nn.Linear(512, len(lb.classes_)) 
-#         # self.dropout = nn.Dropout2d(0.4) 
-#         # self.dropout = nn.Dropout2d(0.2) 
-
-#         #self.l0 = nn.Linear(512, len(lb.classes_))      
-#         self.l00 = nn.Linear(512, 128)
-#         self.l01 = nn.Linear(128, len(lb.classes_))
-#         #self.l0 = nn.Linear(2048, len(lb.classes_))      
-#         # self.l0 = nn.Sequential(nn.Linear(512, 512), nn.ReLU(inplace=True), nn.Linear(512, 128))    
-
-#         #self.ll11 = nn.Sequential(nn.Linear(2048, 512, bias=False), nn.BatchNorm1d(512), nn.ReLU(inplace=True),
-#         #                          nn.Linear(512, 128, bias=True))
-
-#     def forward(self, x):
-#         # # get the batch size only, ignore(c, h, w)       
-#         batch, _, _, _ = x.shape
-#         x = self.model.features(x)
-#         x = F.adaptive_avg_pool2d(x, 1).reshape(batch, -1) 
-#         # x = F.adaptive_avg_pool2d(x, 1).reshape(16, -1)     
-#         # x = self.dropout(x)  
-#         # l0 = self.l0(x) 
-
-#         # l0 = self.l0(x)     
-
-#         #ll11 = self.ll11(x) 
-#         #return F.normalize(x, dim=-1), F.normalize(ll11, dim=-1)     
-
-#         #l0 = self.l0(x)
-#         l00 = F.relu(self.l00(x))
-#         l01 = self.l01(l00)
-#         #ll11 = self.ll11(x)
-#         # l0 = F.normalize(self.l0(x), dim=1)  
-#         #return l0 
-#         return l01
-#         #return l0, F.normalize(x, dim=-1), F.normalize(ll11, dim=-1)
-
-
-
-
-
 import torch.nn as nn
 #from utils import get_activation, get_normalization, SE_Block 
-
 class SE_Block(nn.Module): 
-    "credits: https://github.com/moskomule/senet.pytorch/blob/master/senet/se_module.py#L4 "
     def __init__(self, channels, reduction=16, activation="relu"):
         super().__init__()
         self.reduction = reduction
@@ -1027,7 +408,6 @@ class SE_Block(nn.Module):
         bs, c, _, _ = x.shape
         y = self.squeeze(x).view(bs, c)
         y = self.excitation(y).view(bs, c, 1, 1)
-
         return x * y.expand_as(x)
 
 def get_activation(activation_name):
@@ -1072,7 +452,6 @@ def get_activation(activation_name):
         return activation_name
     else:
         raise ValueError(f"activation must be one of leaky_relu, prelu, selu, gelu, sigmoid, tanh, relu. Got: {activation_name}")
-
 
 def get_normalization(normalization_name, num_channels, num_groups=32, dims=2):
     if normalization_name == "batch":
@@ -1142,52 +521,41 @@ class CoreCNNBlock(nn.Module):
         self.conv3 = nn.Conv2d(self.out_channels, self.out_channels, 3, padding=self.padding, groups=1)
         self.norm3 = get_normalization(norm, self.out_channels)
 
-
     def forward(self, x):
         identity = x
         x = self.activation(self.norm1(self.conv1(x)))
         x = self.activation(self.norm2(self.conv2(x)))
         x = self.norm3(self.conv3(x))
-
         x = x * self.squeeze(x)
-
         if self.residual:
             x = x + self.match_channels(identity)
-
         x = self.activation(x) 
-
         return x
 
 class CoreEncoderBlock(nn.Module): 
     def __init__(self, depth, in_channels, out_channels, norm="batch", activation="relu", padding="same"):
         super(CoreEncoderBlock, self).__init__() 
-
         self.depth = depth
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.activation = activation
         self.norm = norm
         self.padding = padding
-
         self.blocks = []
         for i in range(self.depth): 
             _in_channels = self.in_channels if i == 0 else self.out_channels
             block = CoreCNNBlock(_in_channels, self.out_channels, norm=self.norm, activation=self.activation, padding=self.padding)
 
             self.blocks.append(block)
-
         self.blocks = nn.Sequential(*self.blocks)
         self.downsample = nn.MaxPool2d(kernel_size=2, stride=2)
     
     def forward(self, x):
         for i in range(self.depth):
             x = self.blocks[i](x)
-
         before_downsample = x
         x = self.downsample(x)
-
         return x, before_downsample
-
 
 class CoreAttentionBlock(nn.Module):
     def __init__(self,
@@ -1198,7 +566,6 @@ class CoreAttentionBlock(nn.Module):
         padding="same",
     ):
         super(CoreAttentionBlock, self).__init__()
-
         self.lower_channels = lower_channels
         self.higher_channels = higher_channels
         self.activation = get_activation(activation)
@@ -1206,16 +573,13 @@ class CoreAttentionBlock(nn.Module):
         self.padding = padding
         self.expansion = 4
         self.reduction = 4
-
         if self.lower_channels != self.higher_channels:
             self.match = nn.Sequential(
                 nn.Conv2d(self.higher_channels, self.lower_channels, kernel_size=1, padding=0, bias=False),
                 get_normalization(self.norm, self.lower_channels),
             )
-
         self.compress = nn.Conv2d(self.lower_channels, 1, kernel_size=1, padding=0)
         self.sigmoid = nn.Sigmoid()
-
         self.attn_c_pool = nn.AdaptiveAvgPool2d(self.reduction)
         self.attn_c_reduction = nn.Linear(self.lower_channels * (self.reduction ** 2), self.lower_channels * self.expansion)
         self.attn_c_extention = nn.Linear(self.lower_channels * self.expansion, self.lower_channels)
@@ -1225,10 +589,8 @@ class CoreAttentionBlock(nn.Module):
             x = self.match(x)
         x = x + skip
         x = self.activation(x)
-
         attn_spatial = self.compress(x)
         attn_spatial = self.sigmoid(attn_spatial)
-
         attn_channel = self.attn_c_pool(x)
         attn_channel = attn_channel.reshape(attn_channel.size(0), -1)
         attn_channel = self.attn_c_reduction(attn_channel)
@@ -1236,14 +598,11 @@ class CoreAttentionBlock(nn.Module):
         attn_channel = self.attn_c_extention(attn_channel)
         attn_channel = attn_channel.reshape(x.size(0), x.size(1), 1, 1)
         attn_channel = self.sigmoid(attn_channel)
-
         return attn_spatial, attn_channel
-
 
 class CoreDecoderBlock(nn.Module):
     def __init__(self, depth, in_channels, out_channels, *, norm="batch", activation="relu", padding="same"):
         super(CoreDecoderBlock, self).__init__()
-
         self.depth = depth
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -1251,16 +610,13 @@ class CoreDecoderBlock(nn.Module):
         self.activation = get_activation(activation)
         self.norm = norm
         self.padding = padding
-
         self.upsample = nn.UpsamplingBilinear2d(scale_factor=2)
         self.match_channels = CoreCNNBlock(self.in_channels * 2, self.out_channels, norm=self.norm, activation=self.activation_blocks, padding=self.padding)
         self.attention = CoreAttentionBlock(self.in_channels, self.in_channels, norm=self.norm, activation=self.activation_blocks, padding=self.padding)
-
         self.blocks = []
         for _ in range(self.depth):
             block = CoreCNNBlock(self.out_channels, self.out_channels, norm=self.norm, activation=self.activation_blocks, padding=self.padding)
             self.blocks.append(block)
-
         self.blocks = nn.Sequential(*self.blocks)
     
     def forward(self, x, skip):
@@ -1268,12 +624,9 @@ class CoreDecoderBlock(nn.Module):
         attn_s, attn_c = self.attention(x, skip)
         x = torch.cat([x, (skip * attn_s) + (skip + attn_c)], dim=1)
         x = self.match_channels(x)
-
         for i in range(self.depth):
             x = self.blocks[i](x)
-
         return x
-
 
 class CoreUnet(nn.Module):  
     def __init__(self, *,
@@ -1286,7 +639,6 @@ class CoreUnet(nn.Module):
         padding="same",
     ): 
         super(CoreUnet, self).__init__() 
-
         self.depths = [3, 3, 9, 3] if depths is None else depths 
         self.dims = [96, 192, 384, 768] if dims is None else dims
         #self.depths = [3, 3, 9] if depths is None else depths
@@ -1296,15 +648,11 @@ class CoreUnet(nn.Module):
         self.activation = activation
         self.norm = norm
         self.padding = padding
-
         self.dims = [v // 2 for v in self.dims] 
-
         assert len(self.depths) == len(self.dims), "depths and dims must have the same length. "   
-
         self.stem = nn.Sequential(
             CoreCNNBlock(self.input_dim, self.dims[0], norm=self.norm, activation=self.activation, padding=self.padding),
         )  
-
         self.encoder_blocks = []  
         for i in range(len(self.depths)):
             encoder_block = CoreEncoderBlock(
@@ -1316,11 +664,8 @@ class CoreUnet(nn.Module):
                 padding=self.padding,
             )
             self.encoder_blocks.append(encoder_block)
-
         self.encoder_blocks = nn.ModuleList(self.encoder_blocks)
-
         self.decoder_blocks = [] 
-
         for i in reversed(range(len(self.encoder_blocks))):
             decoder_block = CoreDecoderBlock(
                 self.depths[i],
@@ -1331,13 +676,10 @@ class CoreUnet(nn.Module):
                 padding=self.padding,
             )
             self.decoder_blocks.append(decoder_block)
-
         self.decoder_blocks = nn.ModuleList(self.decoder_blocks)
-
         self.bridge = nn.Sequential(
             CoreCNNBlock(self.dims[-1], self.dims[-1], norm=self.norm, activation=self.activation, padding=self.padding),
         )
-        
         self.head = nn.Sequential(
             CoreCNNBlock(self.dims[0], self.dims[0], norm=self.norm, activation=self.activation, padding=self.padding),
             nn.Conv2d(self.dims[0], self.output_dim, kernel_size=1, padding=0),
@@ -1345,23 +687,12 @@ class CoreUnet(nn.Module):
 
     def forward(self, x):
         skip_connections = []    
-        
         x = self.stem(x)
         for block in self.encoder_blocks:
             x, skip = block(x)
             skip_connections.append(skip)
-
         x = self.bridge(x)
-
-        # for block in self.decoder_blocks: 
-        #     skip = skip_connections.pop()
-        #     x = block(x, skip)
-
-        #x = self.head(x)    
-
         return x
-
-
 
 class CoreEncoder(nn.Module):
     def __init__(self, *,
@@ -1374,7 +705,6 @@ class CoreEncoder(nn.Module):
         padding="same",
     ):
         super(CoreEncoder, self).__init__()
-
         self.depths = [3, 3, 9, 3] if depths is None else depths
         self.dims = [96, 192, 384, 768] if dims is None else dims
         self.output_dim = output_dim
@@ -1382,11 +712,8 @@ class CoreEncoder(nn.Module):
         self.activation = activation
         self.norm = norm
         self.padding = padding
-
         assert len(self.depths) == len(self.dims), "depths and dims must have the same length."
-
         self.stem = CoreCNNBlock(self.input_dim, self.dims[0], norm=self.norm, activation=self.activation, padding=self.padding)
-
         self.encoder_blocks = []  
         for i in range(len(self.depths)): 
             encoder_block = CoreEncoderBlock(
@@ -1398,9 +725,7 @@ class CoreEncoder(nn.Module):
                 padding=self.padding,
             )
             self.encoder_blocks.append(encoder_block)
-
         self.encoder_blocks = nn.ModuleList(self.encoder_blocks)
-
         self.head = nn.Sequential(
             nn.AdaptiveAvgPool2d((1, 1)),
             nn.Flatten(),
@@ -1409,53 +734,19 @@ class CoreEncoder(nn.Module):
 
     def forward(self, x):
         x = self.stem(x)
-
         for block in self.encoder_blocks:
             x, _ = block(x)
-
         x = self.head(x)
-
         return x
 
-
-# if __name__ == "__main__":
-#     from torchinfo import summary
-
-#     BATCH_SIZE = 32
-#     CHANNELS = 10
-#     HEIGHT = 64
-#     WIDTH = 64
-
-#     model = CoreUnet(
-#         input_dim=10,
-#         output_dim=1,
-#     )
-    
-#     model(torch.randn((BATCH_SIZE, CHANNELS, HEIGHT, WIDTH)))
-
-#     summary(
-#         model,
-#         input_size=(BATCH_SIZE, CHANNELS, HEIGHT, WIDTH),
-#     )  
-
-
-
-
-
-# # ResNet model               
-#class ResNet34(nn.Module):          
 class ResNet152(nn.Module):
     def __init__(self, pretrained):
-        #super(ResNet34, self).__init__()                
         super(ResNet152, self).__init__() 
-        #super(ResNet18, self).__init__() 
-
         #self.model = pretrainedmodels.__dict__['resnet152'](pretrained='imagenet')                         
         #self.model = torchvision.models.resnet152(pretrained=True)                          
         class MyResNet18(nn.Module):
             def __init__(self, resnet, resnet2):
                 super().__init__()
-                # # # # create features branch using https://github.com/pytorch/vision/blob/2a52c2dca73513d0d0c3e2a505aed05e5b9aa792/torchvision/models/resnet.py#L230-L246
                 self.features = nn.Sequential(
                     resnet.conv1,
                     resnet.bn1,
@@ -1483,246 +774,89 @@ class ResNet152(nn.Module):
                 self.fc2 = resnet2.fc
 
             def _forward_impl(self, x: torch.Tensor, x2: torch.Tensor) -> torch.Tensor:
-                # # # See note [TorchScript super()]  
                 x = self.features(x)
                 x = self.avgpool(x)
                 x = torch.flatten(x, 1)
                 x = self.fc(x)
-
                 x2 = self.features2(x2)
                 x2 = self.avgpool2(x2)
                 x2 = torch.flatten(x2, 1)
                 x2 = self.fc2(x2) 
-                
                 return x, x2
 
             def forward(self, x: torch.Tensor, x2: torch.Tensor) -> torch.Tensor:
                 return self._forward_impl(x, x2) 
 
-        #model = torchvision.models.resnet152(pretrained=True)                 
-        #model = torchvision.models.resnet18(pretrained=True)      
         model = torchvision.models.resnet152(pretrained=True)
-        #model2 = torchvision.models.resnet18(pretrained=True)
         model2 = torchvision.models.resnet152(pretrained=True)
         self.model = MyResNet18(model, model2)
-        # if pretrained is True:
-        #     #self.model = pretrainedmodels.__dict__['resnet34'](pretrained='imagenet')              
-        #     self.model = pretrainedmodels.__dict__['resnet152'](pretrained='imagenet')   
-        # else:
-        #     #self.model = pretrainedmodels.__dict__['resnet34'](pretrained=None)   
-        #     self.model = pretrainedmodels.__dict__['resnet152'](pretrained=None)  
-        # change the classification layer
-        # self.l0 = nn.Linear(512, len(lb.classes_)) 
-        # self.dropout = nn.Dropout2d(0.4)  
-        # self.dropout = nn.Dropout2d(0.2) 
-
-        #self.l0 = nn.Linear(512, len(lb.classes_))             
-        #self.l0 = nn.Linear(1024, len(lb.classes_))      
-        #self.l0 = nn.Linear(4096, len(lb.classes_))
         self.l0 = nn.Linear(4480, len(lb.classes_))
-        #self.l00 = nn.Linear(1024, 256)  
-        #self.l01 = nn.Linear(256, len(lb.classes_))      
-        #self.l0 = nn.Linear(2048, len(lb.classes_))      
-        # self.l0 = nn.Sequential(nn.Linear(512, 512), nn.ReLU(inplace=True), nn.Linear(512, 128))    
-
-        #self.ll11 = nn.Sequential(nn.Linear(2048, 512, bias=False), nn.BatchNorm1d(512), nn.ReLU(inplace=True),
-        #                          nn.Linear(512, 128, bias=True))
 
     def forward(self, x, x2, x3):
-        # # get the batch size only, ignore(c, h, w)                   
         batch, _, _, _ = x.shape
         x = self.model.features(x)
         x2 = self.model.features2(x2)
-        #x3 = self.model.features2(x3) 
-        
-        
         
         BATCH_SIZE = 32 
         CHANNELS = 12
         HEIGHT = 64
         WIDTH = 64
-
         model = CoreUnet(
             input_dim=CHANNELS,
             output_dim=1,
         ).to(device)   
 
-        #model(torch.randn((BATCH_SIZE, CHANNELS, HEIGHT, WIDTH)))             
-        #model(x3)            
-        #print(model(x3))    
-        #print(model(torch.randn((BATCH_SIZE, CHANNELS, HEIGHT, WIDTH))).shape)     
-        #print(model(x3).shape)      
         x3 = model(x3) 
-        #print(x3.shape) 
-
-        #print(x.shape)       
-        #print(x2.shape)  
-
         x = F.adaptive_avg_pool2d(x, 1).reshape(batch, -1)    
         x2 = F.adaptive_avg_pool2d(x2, 1).reshape(batch, -1) 
         x3 = F.adaptive_avg_pool2d(x3, 1).reshape(batch, -1) 
-        # x = F.adaptive_avg_pool2d(x, 1).reshape(16, -1)       
-        # x = self.dropout(x)  
-        # l0 = self.l0(x)  
-        #ll11 = self.ll11(x)       
-        #return F.normalize(x, dim=-1), F.normalize(ll11, dim=-1)      
-
-        #print(x.shape)  
-        #print(x2.shape) 
-        #print(x3.shape)
-        
-        #x = torch.cat((x, x2), 1)   
         x = torch.cat((x, x2, x3), 1)   
-        #print(x.shape)
         l0 = self.l0(x)
-        #l00 = F.relu(self.l00(x))               
-        #l01 = self.l01(l00)            
-        #ll11 = self.ll11(x) 
-        # l0 = F.normalize(self.l0(x), dim=1)    
         return l0 
-        #return l01    
-        #return l0, F.normalize(x, dim=-1), F.normalize(ll11, dim=-1)
 
-#model = ResNet34(pretrained=True).to(device)               
 model = ResNet152(pretrained=True).to(device) 
-#model = nn.DataParallel(ResNet152(pretrained=True)).to(device)
-#model = nn.DistributedDataParallel(ResNet152(pretrained=True)).to(device)
-#print('') 
-#print(model)   
-
 model.train()
 criterion = nn.CrossEntropyLoss() 
-#optimizer = optim.Adam(model.parameters(), lr=1e-4, weight_decay=0.5e-3)          
 optimizer = optim.Adam(model.parameters(), lr=1e-5, weight_decay=0.5e-3)   
 
 def validate(model):    
-  print('Now validating')                    
+  print('Now validating')                     
   model.eval()    
   running_loss = 0.0  
   running_correct = 0
   with torch.no_grad():
-      #for _, data in tqdm(enumerate(dataloaders['val'])):    
       for idx, batch in enumerate(tqdm(valid_dataloader)):
-      #for _, data in valid_dataloader
-      #for _, data in tqdm(enumerate(dataloaders['train'])):                
-          #data, target = data[0].to(device), data[1].to(device)     
           pixel_values, pixel_values2, pixel_values3, labels = batch[0].to(device, dtype=torch.float32), batch[1].to(device, dtype=torch.float32), batch[2].to(device, dtype=torch.float32), batch[3].to(device)
           pixel_values = pixel_values.permute(0, 3, 1, 2)         
           pixel_values2 = pixel_values2.permute(0, 3, 1, 2)   
           pixel_values3 = pixel_values3.permute(0, 3, 1, 2)
-
           outputs = model(pixel_values, pixel_values2, pixel_values3)
-          #_, preds = torch.max(outputs.data, 1) 
           _, preds = torch.max(outputs, 1)
-          #print(outputs.shape)
-          #print(outputs.data.shape)
-          #print(preds)  
-          #print(labels)
-          #print(preds.shape)
-          #print(labels.shape)
-
-          #loss = criterion(outputs, torch.max(target, 1)[1])                                   
-          #loss = criterion(outputs, target)          
-          #running_loss += loss.item()
-          #_, preds = torch.max(outputs.data, 1)   
-          #print(outputs.logits) 
-          #print(outputs.logits.shape) 
-          #print(data.shape)
-          #_, preds = torch.max(outputs.logits, 1)
-          #_, preds = torch.max(outputs.data, 1)
-          #running_correct += (preds == torch.max(target, 1)[1]).sum().item()                                
-          #running_correct += (preds == target).sum().item()  
           running_correct += (preds == labels).sum().item() 
-      #loss = running_loss / len(dataloaders['val'].dataset)
-      #loss = running_loss / len(dataloaders['train'].dataset)
-      #accuracy = 100. * running_correct / len(dataloaders['val'].dataset)   
       accuracy = 100. * running_correct / len(valid_dataloader.dataset)
-      #accuracy = 100. * running_correct / len(dataloaders['train'].dataset)         
-      #print(f'Val Loss: {loss:.4f}, Val Acc: {accuracy:.2f}') 
       print(f'Val Acc: {accuracy:.2f}')
-      #return loss, accuracy   
       return accuracy
 
 best_test_bpd = 0    
-#for epoch in range(200):  # # # loop over the dataset multiple times                                                                                                
-for epoch in range(120):  # # loop over the dataset multiple times                       
+for epoch in range(120):  # loop over the dataset multiple times                       
    print("Epoch:", epoch) 
    for idx, batch in enumerate(tqdm(train_dataloader)):
         model.train()
-        # # get the inputs                    
-        #pixel_values = batch["pixel_values"].to(device)                        
-        #labels = batch["labels"].to(device)        
-        #pixel_values, labels = batch[0].to(device), batch[1].to(device) 
         pixel_values, pixel_values2, pixel_values3, labels = batch[0].to(device, dtype=torch.float32), batch[1].to(device, dtype=torch.float32), batch[2].to(device, dtype=torch.float32), batch[3].to(device) 
-        #pixel_values = pixel_values.permute(1, 2, 0)                   
         pixel_values = pixel_values.permute(0, 3, 1, 2)        
         pixel_values2 = pixel_values2.permute(0, 3, 1, 2) 
         pixel_values3 = pixel_values3.permute(0, 3, 1, 2)
-        # print(pixel_values.type())       
-        # print(pixel_values2.type())
-        # print(pixel_values3.type())
-        # print(labels.type()) 
-        # # torch.cuda.FloatTensor  
-        # # torch.cuda.FloatTensor 
-        # # torch.cuda.FloatTensor
-        # # torch.cuda.LongTensor
-        # print(pixel_values.shape)          
-        # print(labels.shape)   
-        #pixel_values, pixel_values2 = pixel_values[:,:,:32,:], pixel_values[:,:,32:,:]        
-        #test_loader_iter = iter(test_loader)   
-        #test_loader_iter_next = next(test_loader_iter)    
-        #test_loader_iter_next, test_loader_iter_next2, test_loader_iter_next3, test_loader_iter_next4 = test_loader_iter_next 
-        # plt.figure()                                               
-        # plt.imshow(pixel_values[4,:,:,:].permute(1, 2, 0).cpu().numpy())              
-        # plt.savefig('Fine1.png')   
-        # print(labels)        
-        # print(pixel_values.shape)     
-        # print(labels.shape) 
-
-        # # zero the parameter gradients            
-        #optimizer.zero_grad()      
         optimizer.zero_grad() 
-        # forward + backward + optimize        
-        #outputs = model(pixel_values=pixel_values, labels=labels) 
-        #loss, logits = outputs.loss, outputs.logits 
-        #outputs = model(data)        
-        #outputs = model(pixel_values, pixel_values2)    
         outputs = model(pixel_values, pixel_values2, pixel_values3) 
-        #outputs = model(pixel_values, pixel_values3)   
-        #loss = criterion(outputs, target)      
         loss = criterion(outputs, labels)
-        #_, preds = torch.max(outputs.data, 1)   
-        #loss.backward()                    
         loss.backward()
         optimizer.step()
-        #print(loss)                         
-        # # tensor(2.0583, device='cuda:0', grad_fn=<NllLossBackward0>)    
         print("Loss:", loss.item())  
 
-        #if (epoch % 10 == 0) and (idx == 0):
         if (epoch % 5 == 0) and (idx == 0): 
           accToCheck = validate(model)   
           if accToCheck > best_test_bpd:     
               best_test_bpd = accToCheck  
               torch.save(model.state_dict(), './modelB.pt')   
-
-        # # # evaluate                       
-        # with torch.no_grad(): 
-        #   upsampled_logits = nn.functional.interpolate(logits, size=labels.shape[-2:], mode="bilinear", align_corners=False)
-        #   predicted = upsampled_logits.argmax(dim=1)
-
-        #   # note that the metric expects predictions + labels as numpy arrays
-        #   metric.add_batch(predictions=predicted.detach().cpu().numpy(), references=labels.detach().cpu().numpy())
-
-        # # let's print loss and metrics every 100 batches
-        # if idx % 100 == 0:
-        #   metrics = metric._compute(num_labels=len(id2label),
-        #                            ignore_index=255,
-        #                            reduce_labels=False, # we've already reduced the labels before)
-        #   )
-
-        #   print("Loss:", loss.item())   
-        #   print("Mean_iou:", metrics["mean_iou"])
-        #   print("Mean accuracy:", metrics["mean_accuracy"])
 
 torch.save(model.state_dict(), './model.pt') 
