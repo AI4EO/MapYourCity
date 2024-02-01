@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-# # Main Lines: 314 and 840          
+# # Main Lines: 295 and 816           
 import imageio.v2 as io 
 import matplotlib.pyplot as plt 
 FOLDER = '/Data/ndionelis/StreetDataset/'     
@@ -17,16 +17,8 @@ def get_random_pos(img, window_shape):
     return x1, x2, y1, y2
 WINDOW_SIZE = (600, 600)          
 # image1 = torchvision.io.read_image(FOLDER+'0/0_00_311059203.jpg')         
-# x1, x2, y1, y2 = get_random_pos(image1, WINDOW_SIZE)   
-# image1 = image1[:, x1:x2,y1:y2]
 # plt.imshow(image1.permute(1, 2, 0))   
 
-# #!pip install -q transformers datasets
-#import requests, zipfile, io
-#from datasets import load_dataset 
-#from torch.utils.data import Dataset
-#from PIL import Image
-#from datasets import load_metric 
 import os          
 import imageio.v2 as io
 import shutil
@@ -283,21 +275,6 @@ def nnewa9g9a9e9a9t9alaoader_CIFAR10(train, batch_size, augmentation, dataloader
         **dataloader_kwargs, drop_last=False) 
     return loadertrain, loaderval, loadertest, training_data, forVa_data, test_data
 
-#augmentation_train_in = {}       
-# data_transforms = {
-#     'train': transforms.Compose([
-#         transforms.Resize((256, 256)),
-#         transforms.ToTensor(),
-#     ]),
-#     'val': transforms.Compose([
-#         transforms.Resize((256, 256)),
-#         transforms.ToTensor(),
-#     ]),
-#     'test': transforms.Compose([
-#         transforms.Resize((256, 256)),
-#         transforms.ToTensor(),
-#     ]),
-# }    
 augmentation_train_in = {
     transforms.Compose([
         transforms.ToTensor(),
@@ -311,8 +288,6 @@ train_dataloader = dataloaders['train']
 valid_dataloader = dataloaders['test']
 
 # use train_loader and test_loader  
-# #MapYourCity   
-# Imports  
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -859,4 +834,4 @@ for epoch in range(120):  # loop over the dataset multiple times
               best_test_bpd = accToCheck  
               torch.save(model.state_dict(), './modelB.pt')   
 
-torch.save(model.state_dict(), './model.pt') 
+torch.save(model.state_dict(), './model.pt')  
