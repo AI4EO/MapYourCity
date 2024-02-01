@@ -71,18 +71,18 @@ train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE, shu
 #train_loader_iter = iter(train_loader)
 #train_loader_iter_next = next(train_loader_iter) 
 
-# For the test set
+# Example for the test set
 test_set = Dataset(test_data.tolist())  
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE)   
 #test_loader_iter = iter(test_loader) 
 #test_loader_iter_next = next(test_loader_iter)   
 
-# For the DataLoader
+# For the DataLoaders
 # use train_loader and test_loader      
 train_dataloader = train_loader          
 valid_dataloader = test_loader 
 
-# The sizes depend on BATCH_SIZE 
+# The sizes depend on the BATCH_SIZE  
 print(next(iter(train_dataloader))[0].shape) 
 print(next(iter(train_dataloader))[1].shape)
 print(next(iter(train_dataloader))[2].shape)
