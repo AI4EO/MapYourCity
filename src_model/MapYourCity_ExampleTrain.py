@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-# # Main Lines: 295 and 816           
+# # Main Lines: 295 and 816            
 import imageio.v2 as io 
 import matplotlib.pyplot as plt 
 FOLDER = '/Data/ndionelis/StreetDataset/'     
@@ -815,7 +815,7 @@ def validate(model):
 best_test_bpd = 0    
 for epoch in range(120):  # loop over the dataset multiple times                       
    print("Epoch:", epoch) 
-   for idx, batch in enumerate(tqdm(train_dataloader)):
+   for idx, batch in enumerate(tqdm(train_dataloader)): 
         model.train()
         pixel_values, pixel_values2, pixel_values3, labels = batch[0].to(device, dtype=torch.float32), batch[1].to(device, dtype=torch.float32), batch[2].to(device, dtype=torch.float32), batch[3].to(device) 
         pixel_values = pixel_values.permute(0, 3, 1, 2)        
@@ -834,4 +834,4 @@ for epoch in range(120):  # loop over the dataset multiple times
               best_test_bpd = accToCheck  
               torch.save(model.state_dict(), './modelB.pt')   
 
-torch.save(model.state_dict(), './model.pt')  
+torch.save(model.state_dict(), './model.pt')   
