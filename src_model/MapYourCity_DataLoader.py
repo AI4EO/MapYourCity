@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Example DataLoader for the MapYourCity dataset   
-# Use train_loader and test_loader    
+# Example DataLoader for the MapYourCity dataset     
+# We use train_loader and test_loader    
 
-# Library imports  
+# Library imports   
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import rasterio 
 import os  
 import cv2
-# Use PyTorch
+# We use PyTorch
 import torch
 
 # Define the paths to the data   
