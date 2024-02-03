@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
-# The main lines are: 287 and 811        
+# The main lines are: 287 and 811         
 # To test: torch.save(model.state_dict(), './modelB.pt')    
 import imageio.v2 as io
 import matplotlib.pyplot as plt 
-FOLDER = '/Data/ndionelis/StreetDataset/'    
+FOLDER = '/Data/ndionelis/StreetDataset/'     
 import torchvision             
 import random    
 import torchvision.transforms as T                         
@@ -823,11 +823,8 @@ def validate(model):
       for i in range(len(cf_matrix)):
         sumdiagonals += (cf_matrix / np.sum(cf_matrix, axis=1)[:, None])[i,i]
       sumdiagonals /= len(cf_matrix) 
-      print(f'Mean of diagonals of Confusion Matrix: {100.*sumdiagonals:.2f}')
+      print(f'Mean of diagonal items of Confusion Matrix: {100.*sumdiagonals:.2f}') 
       return accuracy     
 
-validate(model) # # Val Acc: 69.53 
-# # Pr: 69.50, Re: 69.53, F1: 69.38
-# # Mean of diagonals of Confusion Matrix: 66.00  
-
+validate(model)   
 #test(model)                    
