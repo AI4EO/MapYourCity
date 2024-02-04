@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Example Train Model for the MapYourCity dataset      
+# Example Train Model for the MapYourCity dataset       
 
 """
 ABOUT SCRIPT: 
@@ -826,7 +826,7 @@ def validate(model):
       return accuracy
 
 best_test_bpd = 0    
-for epoch in range(120):  # loop over the dataset multiple times                       
+for epoch in range(120):  # loop over the training dataset multiple times                         
    print("Epoch:", epoch) 
    for idx, batch in enumerate(tqdm(train_dataloader)): 
         model.train()
@@ -841,10 +841,12 @@ for epoch in range(120):  # loop over the dataset multiple times
         optimizer.step()
         print("Loss:", loss.item())  
 
-        if (epoch % 5 == 0) and (idx == 0): 
-          accToCheck = validate(model)   
+        if (epoch % 5 == 0) and (idx == 0):   
+          accToCheck = validate(model)    
           if accToCheck > best_test_bpd:     
               best_test_bpd = accToCheck  
               torch.save(model.state_dict(), './modelB.pt')   
 
-torch.save(model.state_dict(), './model.pt')    
+# If using more than 1 GPU, i.e. for multi-GPU: (1) "model = nn.DataParallel(model).cuda()" instead of "model = model.cuda()". - (The "nn.DataParallel(" is added.) 
+# Also: (2) "torch.save(model.module.state_dict(), save_path)" rather than "torch.save(model.state_dict(), save_path)" - (Here, the ".module" is added.) 
+torch.save(model.state_dict(), './model.pt')      
