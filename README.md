@@ -3,7 +3,7 @@ Starter notebook for AI4EO #MapYourCity Challenge
 
  - The main file in this repo is: MapYourCity-data-exploration.ipynb
 
- - An example DataLoader for the MapYourCity dataset can be found in: src_model/MapYourCity_DataLoader.py
+ - An example DataLoader for the MapYourCity dataset can be found in: src_model/MapYourCity_ExampleDataLoader.py
 
  - For the baseline model, the files are: src_model/MapYourCity_ExampleTrain.py and MapYourCity_ExampleTest.py (and model_notebook/Challenge_AI4EO_Model_Notebook.ipynb)
 
