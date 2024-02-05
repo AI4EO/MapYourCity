@@ -32,7 +32,7 @@ WINDOW_SIZE = (600, 600)
 # image1 = torchvision.io.read_image(FOLDER+'0/0_00_311059203.jpg')         
 # plt.imshow(image1.permute(1, 2, 0))   
 
-import os          
+import os           
 import imageio.v2 as io
 import shutil
 from PIL import Image
@@ -50,8 +50,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torchvision 
 
-FOLDER = '/Data/ndionelis/StreetDataset/'             
-MAINFOLDER = '/Data/ndionelis/'   
+FOLDER = '/Data/ndionelis/StreetDataset/'              
+MAINFOLDER = '/Data/ndionelis/'    
 #NUMWORKERS = 6                    
 NUMWORKERS = 0 
 #BATCH_SIZE = 256        
@@ -640,7 +640,7 @@ best_test_bpd = 0
 for epoch in range(120):  # loop over the training dataset multiple times                         
    print("Epoch:", epoch) 
    for idx, batch in enumerate(tqdm(train_dataloader)): 
-        model.train()
+        model.train() 
         pixel_values, pixel_values2, pixel_values3, labels = batch[0].to(device, dtype=torch.float32), batch[1].to(device, dtype=torch.float32), batch[2].to(device, dtype=torch.float32), batch[3].to(device) 
         pixel_values = pixel_values.permute(0, 3, 1, 2)        
         pixel_values2 = pixel_values2.permute(0, 3, 1, 2) 
@@ -650,14 +650,16 @@ for epoch in range(120):  # loop over the training dataset multiple times
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-        print("Loss:", loss.item())  
+        #print("Loss:", loss.item())  
 
-        if (epoch % 5 == 0) and (idx == 0):    
+        #if (epoch % 20 == 0) and (idx == 0): 
+        if (epoch % 5 == 0) and (idx == 0):     
+          print("Loss:", loss.item())  
           accToCheck = validate(model)     
-          if accToCheck > best_test_bpd:     
+          if accToCheck > best_test_bpd:      
               best_test_bpd = accToCheck  
               torch.save(model.state_dict(), './modelB.pt')    
 
 # If using more than 1 GPU, i.e. for multi-GPU: (1) "model = nn.DataParallel(model).cuda()" instead of "model = model.cuda()". - (The "nn.DataParallel(" is added.) 
 # Also: (2) "torch.save(model.module.state_dict(), save_path)" rather than "torch.save(model.state_dict(), save_path)" - (Here, the ".module" is added.) 
-torch.save(model.state_dict(), './model.pt')       
+torch.save(model.state_dict(), './model.pt')        
