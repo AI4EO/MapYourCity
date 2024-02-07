@@ -13,5 +13,5 @@ The model performs data fusion of the three different modalities of street-view 
 
 ![plot](./Figures/DiagramFlowchart.png)
 
-The document that describes the baseline model for the challenge can be found [here](https://drive.google.com/file/d/1WriDmQDS81aUMNzQIB8ztZ59pfTUg-sI/view?usp=sharing).
+The document that describes the baseline model for the challenge can be found [here](https://drive.google.com/file/d/102yMx90Fm45Xo1xILYY7D7J9bXdKzRua/view?usp=sharing).
 
